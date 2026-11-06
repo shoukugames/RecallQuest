@@ -1,0 +1,14 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=RecallQuest
+Name[ja]=リコールクエスト
+GenericName=Reading Comprehension Game
+GenericName[ja]=読解力ゲーム
+Comment=Read silly stories and answer by pointing at pictures (ages 10+)
+Comment[ja]=へんてこなお話を読んで、絵をえらんで答えよう（10才以上）
+Exec=recallquest
+Icon=recallquest
+Terminal=false
+Categories=Game;KidsGame;Education;
+Keywords=reading;comprehension;story;memory;kids;english;japanese;
