@@ -3,7 +3,7 @@ import os
 
 import pygame
 
-from . import paths
+from . import WEB, paths
 
 SOUNDS = ("click", "hover", "correct", "wrong", "tick", "page", "start", "level_clear", "fanfare",
           "time_up", "count", "reveal", "new_record", "type")
@@ -50,7 +50,12 @@ class Audio:
         if not os.path.exists(path):
             return
         try:
-            pygame.mixer.music.fadeout(400)
+            if WEB:
+                # Starting a track waits for a fade-out to finish, which never happens while the
+                # browser page is blocked waiting: stop the old track instead.
+                pygame.mixer.music.stop()
+            else:
+                pygame.mixer.music.fadeout(400)
             pygame.mixer.music.load(path)
             pygame.mixer.music.set_volume(0.55)
             pygame.mixer.music.play(-1, fade_ms=1800)

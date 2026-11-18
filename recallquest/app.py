@@ -6,7 +6,7 @@ os.environ.setdefault("PYGAME_HIDE_SUPPORT_PROMPT", "1")
 
 import pygame  # noqa: E402
 
-from . import __version__, i18n, paths, ui  # noqa: E402
+from . import WEB, __version__, i18n, paths, ui  # noqa: E402
 from .audio import Audio  # noqa: E402
 from .storage import Store  # noqa: E402
 
@@ -65,24 +65,37 @@ class App:
     def present(self):
         pygame.display.flip()
 
+    def frame(self):
+        dt = min(self.clock.tick(60) / 1000.0, 0.05)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.running = WEB  # in a browser there is nothing to quit to
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_F11 and not WEB:
+                pygame.display.toggle_fullscreen()
+                self.store.set("fullscreen", not self.store.settings.get("fullscreen", False))
+            else:
+                self.scene.handle(event)
+        self.scene.update(dt)
+        self.scene.draw(self.canvas)
+        self.present()
+
     def run(self):
         from .scenes.title import TitleScene
         self.switch(TitleScene(self))
         while self.running:
-            dt = min(self.clock.tick(60) / 1000.0, 0.05)
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    self.running = False
-                elif event.type == pygame.KEYDOWN and event.key == pygame.K_F11:
-                    pygame.display.toggle_fullscreen()
-                    self.store.set("fullscreen", not self.store.settings.get("fullscreen", False))
-                else:
-                    self.scene.handle(event)
-            self.scene.update(dt)
-            self.scene.draw(self.canvas)
-            self.present()
+            self.frame()
         self.audio.stop()
         pygame.quit()
+
+    async def run_web(self):
+        """Browser main loop: hands control back to the page after every frame."""
+        import asyncio
+        from .scenes.title import TitleScene
+        self.switch(TitleScene(self))
+        while True:  # a web page has no "quit"; closing the tab ends the game
+            self.running = True
+            self.frame()
+            await asyncio.sleep(0)
 
 
 def main(argv=None):

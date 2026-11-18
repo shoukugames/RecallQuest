@@ -4,7 +4,7 @@ import webbrowser
 
 import pygame
 
-from .. import RELEASE_DATE, __version__, art, i18n, ui
+from .. import WEB, RELEASE_DATE, __version__, art, i18n, ui
 from ..app import Scene
 from ..story import LEVELS
 from ..ui import INK, INK_SOFT, PAPER, WHITE
@@ -108,7 +108,11 @@ class CreditsScene(InfoScene):
                 if rect.collidepoint(event.pos):
                     self.app.audio.play("click")
                     try:
-                        webbrowser.open(target)
+                        if WEB:
+                            import platform  # pygbag's bridge to the page
+                            platform.window.open(target, "_blank")
+                        else:
+                            webbrowser.open(target)
                     except Exception:  # noqa: BLE001 - no browser is fine
                         pass
 

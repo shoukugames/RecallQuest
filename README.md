@@ -58,6 +58,21 @@ clears everything (it asks first).
 Saved data lives in `~/.local/share/recallquest/` (Linux) or `%APPDATA%\RecallQuest\`
 (Windows). Set `RECALLQUEST_DATA` to use another folder.
 
+## Play in the browser
+
+RecallQuest also runs in a web browser, on computers, phones and tablets, with nothing to
+install: <https://shoukugames.org/play/recallquest/> (test page). Everything works by tapping
+or clicking. Settings, scores and progress are saved in the browser.
+
+```bash
+python3 -m pip install pygame pygbag     # plus ffmpeg on PATH (or FFMPEG=/path/to/ffmpeg)
+python3 tools/build_web.py               # -> build/web/: upload the folder as-is
+```
+
+The build uses [pygbag](https://pygame-web.github.io/), which also converts the sounds to OGG.
+`main.py` is the web entry point; the browser-only parts switch on only in the browser.
+`recallquest.apk` is pygbag's name for its bundle of game files; it is not an Android app.
+
 ## Install
 
 - **Linux (Debian/Ubuntu):** `sudo apt install ./dist/recallquest_v0.1.0_amd64.deb`, then run

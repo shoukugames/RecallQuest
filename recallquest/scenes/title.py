@@ -3,7 +3,7 @@ import math
 
 import pygame
 
-from .. import __version__, art, i18n, ui
+from .. import WEB, __version__, art, i18n, ui
 from ..app import Scene
 from ..story import LEVELS
 from ..ui import INK, INK_SOFT, WHITE
@@ -28,6 +28,9 @@ class TitleScene(Scene):
         self.credits_btn = ui.Button((80, 642, 264, 50), lambda: i18n.t("credits"), ui.INK_SOFT, 20)
         self.quit_btn = ui.Button((356, 642, 264, 50), lambda: i18n.t("quit"), ui.RED, 20)
         self.buttons = [self.bgm_btn, self.play_btn, self.howto_btn, self.parents_btn, self.credits_btn, self.quit_btn]
+        if WEB:  # a web page has nothing to quit to: no Quit button, Credits takes the whole row
+            self.buttons.remove(self.quit_btn)
+            self.credits_btn.rect = pygame.Rect(80, 642, 540, 50)
 
     def handle(self, event):
         app = self.app
@@ -50,7 +53,7 @@ class TitleScene(Scene):
         elif self.credits_btn.clicked(event, app):
             from .info import CreditsScene
             app.switch(CreditsScene(app))
-        elif self.quit_btn.clicked(event, app) or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
+        elif not WEB and (self.quit_btn.clicked(event, app) or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE)):
             app.running = False
 
     def update(self, dt):
