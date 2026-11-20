@@ -1,0 +1,12 @@
+{
+ "_note": "Replace identity_name, publisher and publisher_display_name with the values from Partner Center (Product management -> Product identity) before uploading to the Microsoft Store.",
+ "identity_name": "ShoukuGames.RecallQuest",
+ "publisher": "CN=ShoukuGamesPlaceholder",
+ "publisher_display_name": "Shouku Games",
+ "display_name": "RecallQuest",
+ "description": "Read a brand-new silly story before the timer runs out, then point at the right pictures to answer three questions.",
+ "file_name": "RecallQuest",
+ "exe_name": "RecallQuest.exe",
+ "alias": "shouku-recallquest.exe",
+ "device_capabilities": []
+}
